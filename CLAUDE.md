@@ -1,4 +1,4 @@
-@../.claude/rules/csharp.md
+@../.claude/lang/csharp.md
 
 ## Mutation Testing Branch Isolation
 
