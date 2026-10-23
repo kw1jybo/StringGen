@@ -17,9 +17,10 @@ internal static class CommandFactory
 
     private static RootCommand BuildRootCommand()
     {
-        var patternArg = new Argument<string>("pattern")
+        var patternArg = new Argument<string?>("pattern")
         {
-            Description = "Regular expression pattern governing string generation"
+            Description = "Regular expression pattern or built-in pattern name (e.g. phone-us, email, uuid)",
+            Arity = ArgumentArity.ZeroOrOne
         };
 
         var countOption = new Option<int>("--count")
@@ -45,18 +46,42 @@ internal static class CommandFactory
             DefaultValueFactory = _ => 5
         };
 
+        var listPatternsOption = new Option<bool>("--list-patterns")
+        {
+            Description = "List all built-in named patterns and exit"
+        };
+
         var rootCommand = new RootCommand("StringGen — generate random strings governed by a regex pattern")
         {
             patternArg,
             countOption,
             modeOption,
             seedOption,
-            maxRepeatOption
+            maxRepeatOption,
+            listPatternsOption
         };
 
         rootCommand.SetAction((ParseResult parseResult) =>
         {
-            var pattern = parseResult.GetValue(patternArg)!;
+            var listPatterns = parseResult.GetValue(listPatternsOption);
+            if (listPatterns)
+            {
+                Console.WriteLine("Built-in patterns:\n");
+                foreach (var p in BuiltInPatterns.All)
+                {
+                    Console.WriteLine($"  {p.Name,-20} {p.Description}");
+                }
+                return 0;
+            }
+
+            var rawPattern = parseResult.GetValue(patternArg);
+            if (rawPattern is null)
+            {
+                Console.Error.WriteLine("Error: provide a pattern or --list-patterns to see available names");
+                return 1;
+            }
+
+            var pattern = BuiltInPatterns.TryResolve(rawPattern, out var resolved) ? resolved : rawPattern;
             var count = parseResult.GetValue(countOption);
             var mode = parseResult.GetValue(modeOption);
             var seed = parseResult.GetValue(seedOption);
