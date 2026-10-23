@@ -1,5 +1,3 @@
-@../.claude/lang/csharp.md
-
 ## Mutation Testing Branch Isolation
 
 **This rule applies with NO EXCEPTIONS.**
