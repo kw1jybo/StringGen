@@ -15,3 +15,4 @@ The language rules live once, in `C:\Code\.claude\lang\`, and this repo imports 
 
 @../.claude/lang/common.md
 @../.claude/lang/csharp.md
+@../.claude/lang/github-actions.md
