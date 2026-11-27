@@ -8,3 +8,9 @@ If any work involves running a mutation testing tool (Stryker or equivalent), th
 - **If you are on a feature branch**: branch off that feature branch, do the mutation work on that subbranch, then merge the subbranch back when complete.
 
 Never run Stryker on `master` or on a branch intended to accumulate feature work. A machine reboot, crash, or interrupted run must not leave the working branch in a dirty or inconsistent state.
+
+## Language rules (shared)
+
+The language rules live once, in `C:\Code\.claude\lang\`, and this repo imports only the ones it uses. Do not copy them here, and do not use symlinks (Windows checks them out as plain text).
+
+@../.claude/lang/csharp.md
